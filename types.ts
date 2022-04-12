@@ -32,3 +32,9 @@ export interface IFlight {
   fromstopage: IStoppage;
   tostopage: IStoppage;
 }
+
+export interface ICity {
+  id: number;
+  name: string;
+  country: string;
+}

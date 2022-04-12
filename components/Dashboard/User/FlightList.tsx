@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { IFlight } from "../../../types";
 import { formatTime } from "../../../utils/String";
@@ -38,9 +39,11 @@ const FlightList = ({ flights }: { flights: IFlight[] }) => {
               <td className="p-2 border-2">{f.date}</td>
               <td className="p-2 border-2">
                 <div className="flex justify-center">
-                  <button className="bg-blue-500 rounded p-1 text-white hover:bg-blue-700 transition-colors">
-                    Book
-                  </button>
+                  <Link passHref href={`?tab=booking`}>
+                    <button className="bg-blue-500 rounded p-1 text-white hover:bg-blue-700 transition-colors">
+                      Book
+                    </button>
+                  </Link>
                 </div>
               </td>
             </tr>

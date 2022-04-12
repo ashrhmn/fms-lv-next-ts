@@ -23,16 +23,17 @@ const SignInPage: NextPage = () => {
     }
   };
   return (
-    <div className="flex justify-center items-center h-[100vh]">
+    <div className="flex justify-center items-center flex-col gap-4 h-[100vh]">
+      <h1 className="text-6xl font-bold">Sign In</h1>
       <div className="flex p-6 border-2 rounded-lg flex-col w-96 justify-center gap-10 items-center text-2xl">
         <input
-          className="w-full p-4 rounded"
+          className="w-full p-4 rounded border-2"
           placeholder="Username"
           type="text"
           {...usernameInputController}
         />
         <input
-          className="w-full p-4 rounded"
+          className="w-full p-4 rounded border-2"
           placeholder="Password"
           type="password"
           {...passwordInputController}
