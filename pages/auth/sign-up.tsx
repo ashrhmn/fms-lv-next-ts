@@ -35,8 +35,13 @@ const SignUpPage: NextPage<Props> = ({ cities }) => {
       role: "User",
       cityId: cityIdIc.value,
     };
-    const response = await service().post(`auth/sign-up`, body);
-    router.push("/auth/sign-in");
+    try {
+      const response = await service().post(`auth/sign-up`, body);
+      console.log(response.data);
+      router.push("/auth/sign-in");
+    } catch (error) {
+      console.log("Sign up error : ", error);
+    }
   };
 
   return (
