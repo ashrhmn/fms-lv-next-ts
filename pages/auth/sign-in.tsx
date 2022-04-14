@@ -16,7 +16,8 @@ const SignInPage: NextPage = () => {
         username: usernameInputController.value,
         password: passwordInputController.value,
       });
-      Cookies.set("token", response.data.value);
+      // console.log(response);
+      Cookies.set("token", response.data.token);
       router.reload();
     } catch (error) {
       console.log("sign-in : ", error);

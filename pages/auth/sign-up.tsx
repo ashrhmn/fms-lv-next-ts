@@ -18,22 +18,22 @@ const SignUpPage: NextPage<Props> = ({ cities }) => {
   const phoneIc = useInput();
   const dobIc = useInput();
   const addressIc = useInput();
-  const cityIdIc = useInput(cities[0].id.toString());
+  const cityIdIc = useInput(cities[0].Id.toString());
 
   const router = useRouter();
 
   const handleSignUp = async () => {
     if (passwordIc.value != password2Ic.value) return;
     const body = {
-      username: usernameIc.value,
-      password: passwordIc.value,
-      name: nameIc.value,
-      dateOfBirth: dobIc.value,
-      address: addressIc.value,
-      email: emailIc.value,
-      phone: phoneIc.value,
-      role: "User",
-      cityId: cityIdIc.value,
+      Username: usernameIc.value,
+      Password: passwordIc.value,
+      Name: nameIc.value,
+      DateOfBirth: dobIc.value,
+      Address: addressIc.value,
+      Email: emailIc.value,
+      Phone: phoneIc.value,
+      Role: 2,
+      CityId: cityIdIc.value,
     };
     try {
       const response = await service().post(`auth/sign-up`, body);
@@ -74,7 +74,7 @@ const SignUpPage: NextPage<Props> = ({ cities }) => {
         />
         <input
           className="w-full p-4 rounded border-2"
-          type="text"
+          type="email"
           placeholder="Email"
           {...emailIc}
         />
@@ -98,9 +98,9 @@ const SignUpPage: NextPage<Props> = ({ cities }) => {
         <select {...cityIdIc} className="w-full p-4 rounded border-2">
           {cities.map((c) => (
             <option
-              value={c.id}
-              key={c.name}
-            >{`${c.name}, ${c.country}`}</option>
+              value={c.Id}
+              key={c.Name}
+            >{`${c.Name}, ${c.Country}`}</option>
           ))}
         </select>
         <div className="flex gap-4 justify-center">

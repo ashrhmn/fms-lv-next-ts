@@ -1,40 +1,40 @@
 export interface ICity {
-  id: number;
-  name: string;
-  country: string;
+  Id: number;
+  Name: string;
+  Country: string;
 }
 
 export interface IStoppage {
-  id: number;
-  name: string;
-  city_id: number;
-  route_index: number;
-  fare_from_root: number;
-  city: ICity;
+  Id: number;
+  Name: string;
+  CityId: number;
+  RouteIndex: number;
+  FareFromRoot: number;
+  City: ICity;
 }
 
 export interface ITransport {
-  id: number;
-  name: string;
-  maximum_seat: number;
-  created_by: number;
+  Id: number;
+  Name: string;
+  MaximumSeat: number;
+  CreatedBy: number;
 }
 
 export interface IFlight {
-  id: number;
-  transport_id: number;
-  from_stopage_id: number;
-  to_stopage_id: number;
-  day: string;
-  time: number;
-  date: string;
-  transport: ITransport;
-  fromstopage: IStoppage;
-  tostopage: IStoppage;
+  Id: number;
+  TransportId: number;
+  FromStoppageId: number;
+  ToStoppageId: number;
+  Day: string;
+  Time: number;
+  Date: string;
+  Transport: ITransport;
+  FromStoppage: IStoppage;
+  ToStoppage: IStoppage;
 }
 
 export interface ICity {
-  id: number;
-  name: string;
-  country: string;
+  Id: number;
+  Name: string;
+  Country: string;
 }

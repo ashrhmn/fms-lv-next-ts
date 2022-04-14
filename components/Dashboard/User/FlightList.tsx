@@ -19,24 +19,24 @@ const FlightList = ({ flights }: { flights: IFlight[] }) => {
         </thead>
         <tbody>
           {flights.map((f) => (
-            <tr key={f.id}>
-              <td className="p-2 border-2">{f.transport.name}</td>
+            <tr key={f.Id}>
+              <td className="p-2 border-2">{f.Transport.Name}</td>
               <td className="p-2 border-2">
-                <span>{f.fromstopage.name}</span>
+                <span>{f.FromStoppage.Name}</span>
                 <br />
                 <span>
-                  {f.fromstopage.city.name}, {f.fromstopage.city.country}
+                  {f.FromStoppage.City.Name}, {f.FromStoppage.City.Country}
                 </span>
               </td>
               <td className="p-2 border-2">
-                <span>{f.tostopage.name}</span>
+                <span>{f.ToStoppage.Name}</span>
                 <br />
                 <span>
-                  {f.tostopage.city.name}, {f.tostopage.city.country}
+                  {f.ToStoppage.City.Name}, {f.ToStoppage.City.Country}
                 </span>
               </td>
-              <td className="p-2 border-2">{formatTime(f.time)}</td>
-              <td className="p-2 border-2">{f.date}</td>
+              <td className="p-2 border-2">{formatTime(f.Time)}</td>
+              <td className="p-2 border-2">{f.Date}</td>
               <td className="p-2 border-2">
                 <div className="flex justify-center">
                   <Link passHref href={`?tab=booking`}>

@@ -51,8 +51,8 @@ export const getServerSideProps: GetServerSideProps = async (
     if (!tabs.includes(tab)) tab = tabs[0];
     switch (tab) {
       case "book":
-        const { data: flights } = await service().get(`user-db/flights`);
-        return { props: { flights, tab, hasError: false } };
+        const { data: flights } = await service(context).get(`user-db/flights`);
+        return { props: { flights: flights.data, tab, hasError: false } };
       case "booking":
         return { props: { tab, hasError: false } };
       default:
