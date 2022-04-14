@@ -9,17 +9,18 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   });
   const currentUser = await currUserRes.json();
 
+  console.log("Curr : ", currentUser);
+
   if (!currentUser.data)
     return NextResponse.redirect(`${baseUrl}auth/sign-in`, 301);
 
   if (!currentUser.data.Verified)
-    return NextResponse.redirect(`${baseUrl}auth/verify-email`, 301);
+    return NextResponse.redirect(`${baseUrl}verify-email`, 301);
 
   const validUrl = `/dashboard/${(
     currentUser.data.Role as string
   ).toLowerCase()}`;
   const url = req.page.name;
-  // console.log(validUrl, url, validUrl == url);
   if (validUrl != url)
     return NextResponse.redirect(`${baseUrl}auth/sign-in`, 301);
 

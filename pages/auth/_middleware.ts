@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
     })
   ).json();
   console.log("Curr : ", currentUser);
-  if (currentUser.data && currentUser.data.Verified)
+  if (currentUser.data)
     return NextResponse.redirect(
       `${baseUrl}dashboard/${(currentUser.data.Role as string).toLowerCase()}`,
       301
