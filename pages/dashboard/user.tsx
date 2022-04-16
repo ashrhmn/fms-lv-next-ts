@@ -1,11 +1,12 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
-import Link from "next/link";
 import React from "react";
 import FlightList from "../../components/Dashboard/User/FlightList";
 import { service } from "../../service";
 import { IFlight } from "../../types";
-import Cookies from "js-cookie";
-import { useRouter } from "next/router";
+import SideBarLink from "../../components/Dashboard/Common/SideBarLink";
+import { makeId } from "../../utils/String";
+import SideBarLogout from "../../components/Dashboard/Common/SideBarLogout";
+import DashboardLayout from "../../components/Layout/Dashboard";
 
 interface Props {
   flights: IFlight[];
@@ -13,25 +14,15 @@ interface Props {
   hasError: boolean;
 }
 
+const tabNames = ["Book Flight", "Previous Orders", "Pending Flights"];
 const UserDashboard: NextPage<Props> = ({ tab, flights, hasError }) => {
-  const router = useRouter();
-  const handleLogout = () => {
-    Cookies.remove("token");
-    router.reload();
-  };
   if (hasError) return <div>Error</div>;
   return (
-    <div className="relative">
-      <div className="flex flex-col fixed left-0 top-0 bottom-0 w-[300px] items-start text-2xl bg-gray-100 mx-auto p-2">
-        <Link href={`?tab=book`}>Book Flight</Link>
-        <Link href={`?tab=orders`}>Previous Orders</Link>
-        <Link href={`?tab=pending-flights`}>Pending Flights</Link>
-        <button onClick={handleLogout}>Logout</button>
-      </div>
-      <div className="ml-[300px] p-10">
-        <div>{tab == "book" && <FlightList flights={flights} />}</div>
-      </div>
-    </div>
+    <DashboardLayout
+      currentTab={tab}
+      tabs={tabNames}
+      elements={[<FlightList key={1} flights={flights} />]}
+    />
   );
 };
 
@@ -39,12 +30,12 @@ export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   try {
-    const tabs = ["book", "orders", "pending-flights", "booking"];
+    const tabs = [...tabNames.map((tab) => makeId(tab)), "booking"];
     let tab: string = context.query.tab as string;
     if (!tabs.includes(tab)) tab = tabs[0];
     switch (tab) {
-      case "book":
-        const { data: flights } = await service().get(`user-db/flights`);
+      case "book-flight":
+        const { data: flights } = await service(context).get(`user-db/flights`);
         return { props: { flights, tab, hasError: false } };
       case "booking":
         return { props: { tab, hasError: false } };

@@ -107,10 +107,16 @@ const TicketSales = ({ transports }: { transports: ITransport[] }) => {
   };
 
   return (
-    <div>
-      <Bar options={options("All Sales")} data={dataAll} />
-      <Bar options={options("Sales by Age Class")} data={dataAgeClass} />
-      <Bar options={options("Sales by Seat Class")} data={dataSeatClass} />
+    <div className="flex flex-wrap gap-20 justify-center">
+      <div className="min-w-[500px]">
+        <Bar options={options("All Sales")} data={dataAll} />
+      </div>
+      <div className="min-w-[500px]">
+        <Bar options={options("Sales by Age Class")} data={dataAgeClass} />
+      </div>
+      <div className="min-w-[500px]">
+        <Bar options={options("Sales by Seat Class")} data={dataSeatClass} />
+      </div>
     </div>
   );
 };

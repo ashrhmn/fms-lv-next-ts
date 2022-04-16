@@ -1,48 +1,42 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
-import Link from "next/link";
 import React from "react";
-import FlightList from "../../components/Dashboard/User/FlightList";
 import { service } from "../../service";
-import { IFlight, ITicket, ITransport, IUser } from "../../types";
-import Cookies from "js-cookie";
-import { useRouter } from "next/router";
+import { ICity, ITransport, IUser } from "../../types";
 import TicketSales from "../../components/Dashboard/Admin/Sales";
 import { baseApiUrl } from "../../consts";
 import UserList from "../../components/Dashboard/Admin/UserList";
+import SideBarLink from "../../components/Dashboard/Common/SideBarLink";
+import SideBarLogout from "../../components/Dashboard/Common/SideBarLogout";
+import DashboardLayout from "../../components/Layout/Dashboard";
+import { makeId } from "../../utils/String";
 
 interface Props {
   transports: ITransport[];
   users: IUser[];
+  cities: ICity[];
   tab: string;
   hasError: boolean;
 }
 
+const tabNames = ["Sales", "User List", "Pending Flights", "Flight List"];
+
 const AdminDashboard: NextPage<Props> = ({
   transports,
   users,
+  cities,
   tab,
   hasError = false,
 }) => {
-  const router = useRouter();
-  const handleLogout = () => {
-    Cookies.remove("token");
-    router.reload();
-  };
   if (hasError) return <div>Error</div>;
   return (
-    <div className="relative">
-      <div className="flex flex-col fixed left-0 bottom-0 top-0 w-[300px] items-start text-2xl bg-gray-100 mx-auto p-2">
-        <Link href={`?tab=sales`}>Sales</Link>
-        <Link href={`?tab=user-list`}>User List</Link>
-        <Link href={`?tab=pending-fligts`}>Pending Flights</Link>
-        <Link href={`?tab=flight-list`}>Flights List</Link>
-        <button onClick={handleLogout}>Logout</button>
-      </div>
-      <div className="ml-[300px] p-10">
-        {tab == "sales" && <TicketSales transports={transports} />}
-        {tab == "user-list" && <UserList users={users} />}
-      </div>
-    </div>
+    <DashboardLayout
+      currentTab={tab}
+      tabs={tabNames}
+      elements={[
+        <TicketSales key={1} transports={transports} />,
+        <UserList key={2} cities={cities} users={users} />,
+      ]}
+    />
   );
 };
 
@@ -50,20 +44,25 @@ export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   try {
-    const tabs = ["sales", "user-list", "pending-flights", "flight-list"];
+    const tabs = tabNames.map((tab) => makeId(tab));
     let tab: string = context.query.tab as string;
     if (!tabs.includes(tab)) tab = tabs[0];
     switch (tab) {
       case "sales":
-        const { data: response1 } = await service().get(
+        const { data: response1 } = await service(context).get(
           `${baseApiUrl}api/admin-db/transports`
         );
         return { props: { transports: response1.data, tab } };
       case "user-list":
-        const { data: response2 } = await service().get(
+        const { data: response2 } = await service(context).get(
           `${baseApiUrl}api/admin-db/users`
         );
-        return { props: { users: response2.data, tab } };
+        const { data: response3 } = await service(context).get(
+          `${baseApiUrl}api/admin-db/cities`
+        );
+        return {
+          props: { users: response2.data, cities: response3.data, tab },
+        };
       default:
         return { props: { tab } };
     }
