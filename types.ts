@@ -18,6 +18,7 @@ export interface ITransport {
   name: string;
   maximum_seat: number;
   created_by: number;
+  tickets: ITicket[];
 }
 
 export interface IFlight {
@@ -37,4 +38,30 @@ export interface ICity {
   id: number;
   name: string;
   country: string;
+}
+
+export interface ITicket {
+  id: number;
+  start_time: string;
+  seat_no: number;
+  ticket_id: number;
+  transport_id: number;
+  age_class: string;
+  seat_class: string;
+  status: string;
+}
+
+export interface IUser {
+  id: number;
+  username: string;
+  name: string;
+  date_of_birth: string;
+  family_id: number;
+  address: string;
+  city_id: number;
+  email: string;
+  verified: 0 | 1;
+  phone: string;
+  role: string;
+  city: ICity;
 }

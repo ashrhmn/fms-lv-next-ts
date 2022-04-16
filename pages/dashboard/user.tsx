@@ -22,7 +22,7 @@ const UserDashboard: NextPage<Props> = ({ tab, flights, hasError }) => {
   if (hasError) return <div>Error</div>;
   return (
     <div className="relative">
-      <div className="flex flex-col absolute left-0 h-[100vh] w-[300px] items-start text-2xl bg-gray-100 mx-auto p-2">
+      <div className="flex flex-col fixed left-0 top-0 bottom-0 w-[300px] items-start text-2xl bg-gray-100 mx-auto p-2">
         <Link href={`?tab=book`}>Book Flight</Link>
         <Link href={`?tab=orders`}>Previous Orders</Link>
         <Link href={`?tab=pending-flights`}>Pending Flights</Link>
@@ -39,13 +39,6 @@ export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   try {
-    // const { data: currentUser } = await service(context).get(
-    //   `auth/current-user`
-    // );
-
-    // if (currentUser.data.role !== "User")
-    //   return { props: {}, redirect: { destination: "/auth/sign-in" } };
-
     const tabs = ["book", "orders", "pending-flights", "booking"];
     let tab: string = context.query.tab as string;
     if (!tabs.includes(tab)) tab = tabs[0];

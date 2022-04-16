@@ -12,11 +12,14 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   if (!currentUser.data)
     return NextResponse.redirect(`${baseUrl}auth/sign-in`, 301);
 
+  if (!currentUser.data.verified)
+    return NextResponse.redirect(`${baseUrl}verify-email`);
+
   const validUrl = `/dashboard/${(
     currentUser.data.role as string
   ).toLowerCase()}`;
   const url = req.page.name;
-  // console.log(validUrl, url, validUrl == url);
+  console.log(validUrl, url, validUrl == url);
   if (validUrl != url)
     return NextResponse.redirect(`${baseUrl}auth/sign-in`, 301);
 
