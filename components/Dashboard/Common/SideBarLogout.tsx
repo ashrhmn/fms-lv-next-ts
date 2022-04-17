@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 const SideBarLogout = () => {
   const router = useRouter();
   const handleLogout = () => {
-    Cookies.remove("token");
+    Cookies.remove("Authorization");
     router.reload();
   };
   return (

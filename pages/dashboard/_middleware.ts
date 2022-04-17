@@ -2,10 +2,11 @@ import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { baseApiUrl, baseUrl } from "../../consts";
 
 export async function middleware(req: NextRequest, ev: NextFetchEvent) {
-  const { token } = req.cookies;
-  if (!token) return NextResponse.redirect(`${baseUrl}auth/sign-in`, 301);
+  const { Authorization } = req.cookies;
+  if (!Authorization)
+    return NextResponse.redirect(`${baseUrl}auth/sign-in`, 301);
   const currUserRes = await fetch(`${baseApiUrl}api/auth/current-user`, {
-    headers: { token },
+    headers: { Authorization },
   });
   const currentUser = await currUserRes.json();
 
