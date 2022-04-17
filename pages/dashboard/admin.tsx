@@ -2,13 +2,11 @@ import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import React from "react";
 import { service } from "../../service";
 import { ICity, ITransport, IUser } from "../../types";
-import TicketSales from "../../components/Dashboard/Admin/Sales";
 import { baseApiUrl } from "../../consts";
 import UserList from "../../components/Dashboard/Admin/UserList";
-import SideBarLink from "../../components/Dashboard/Common/SideBarLink";
-import SideBarLogout from "../../components/Dashboard/Common/SideBarLogout";
 import DashboardLayout from "../../components/Layout/Dashboard";
 import { makeId } from "../../utils/String";
+import AdminOverview from "../../components/Dashboard/Admin/Overview";
 
 interface Props {
   transports: ITransport[];
@@ -18,7 +16,7 @@ interface Props {
   hasError: boolean;
 }
 
-const tabNames = ["Sales", "User List", "Pending Flights", "Flight List"];
+const tabNames = ["Overview", "User List", "Pending Flights", "Flight List"];
 
 const AdminDashboard: NextPage<Props> = ({
   transports,
@@ -33,8 +31,8 @@ const AdminDashboard: NextPage<Props> = ({
       currentTab={tab}
       tabs={tabNames}
       elements={[
-        <TicketSales key={1} transports={transports} />,
-        <UserList key={2} cities={cities} users={users} />,
+        <AdminOverview key={1} transports={transports} cities={cities} />,
+        <UserList key={2} users={users} />,
       ]}
     />
   );
@@ -48,20 +46,22 @@ export const getServerSideProps: GetServerSideProps = async (
     let tab: string = context.query.tab as string;
     if (!tabs.includes(tab)) tab = tabs[0];
     switch (tab) {
-      case "sales":
+      case tabs[0]:
         const { data: response1 } = await service(context).get(
           `${baseApiUrl}api/admin-db/transports`
         );
-        return { props: { transports: response1.data, tab } };
-      case "user-list":
         const { data: response2 } = await service(context).get(
-          `${baseApiUrl}api/admin-db/users`
-        );
-        const { data: response3 } = await service(context).get(
           `${baseApiUrl}api/admin-db/cities`
         );
         return {
-          props: { users: response2.data, cities: response3.data, tab },
+          props: { transports: response1.data, cities: response2.data, tab },
+        };
+      case tabs[1]:
+        const { data: response3 } = await service(context).get(
+          `${baseApiUrl}api/admin-db/users`
+        );
+        return {
+          props: { users: response3.data, tab },
         };
       default:
         return { props: { tab } };

@@ -11,7 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { ITicket, ITransport } from "../../../types";
+import { ICity, ITransport } from "../../../types";
 
 ChartJS.register(
   CategoryScale,
@@ -35,8 +35,25 @@ const options = (title: string) => ({
   },
 });
 
-const TicketSales = ({ transports }: { transports: ITransport[] }) => {
+const AdminOverview = ({
+  transports,
+  cities,
+}: {
+  transports: ITransport[];
+  cities: ICity[];
+}) => {
   const labels = transports.map((t) => t.name);
+
+  const dataStoppages = {
+    labels: cities.map((c) => c.name),
+    datasets: [
+      {
+        label: "Number of stoppages in Cities",
+        data: cities.map((c) => c.stopages.length),
+        backgroundColor: "rgba(115, 199, 132, 0.5)",
+      },
+    ],
+  };
 
   const dataAll = {
     labels,
@@ -117,8 +134,11 @@ const TicketSales = ({ transports }: { transports: ITransport[] }) => {
       <div className="min-w-[500px]">
         <Bar options={options("Sales by Seat Class")} data={dataSeatClass} />
       </div>
+      <div className="min-w-[500px]">
+        <Bar options={options("Stoppages in cities")} data={dataStoppages} />
+      </div>
     </div>
   );
 };
 
-export default TicketSales;
+export default AdminOverview;

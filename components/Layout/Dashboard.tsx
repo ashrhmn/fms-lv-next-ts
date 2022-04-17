@@ -18,15 +18,22 @@ const DashboardLayout = ({
         className={`flex flex-col fixed left-0 bottom-0 top-0 w-[250px] items-center text-2xl bg-gray-100 mx-auto p-2`}
       >
         {tabs.map((tab) => (
-          <SideBarLink key={tab} name={tab} />
+          <SideBarLink key={tab} currentTab={currentTab} name={tab} />
         ))}
         <SideBarLogout />
       </div>
       <div className={`ml-[250px] p-10`}>
-        {tabs.map(
-          (tab, index) =>
-            currentTab == makeId(tab) && (elements[index] ?? <div>Empty</div>)
-        )}
+        <div className="flex justify-center">
+          {tabs.map(
+            (tab, index) =>
+              currentTab == makeId(tab) &&
+              (elements[index] ?? (
+                <div className="text-center font-bold text-7xl" key={index}>
+                  Page Not Found
+                </div>
+              ))
+          )}
+        </div>
       </div>
     </div>
   );

@@ -61,7 +61,7 @@ export interface IUser {
   address: string;
   city_id: number;
   email: string;
-  verified: 0 | 1;
+  verified: boolean;
   phone: string;
   role: string;
   city: ICity;

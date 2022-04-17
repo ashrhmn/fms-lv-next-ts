@@ -3,9 +3,7 @@ import React from "react";
 import FlightList from "../../components/Dashboard/User/FlightList";
 import { service } from "../../service";
 import { IFlight } from "../../types";
-import SideBarLink from "../../components/Dashboard/Common/SideBarLink";
 import { makeId } from "../../utils/String";
-import SideBarLogout from "../../components/Dashboard/Common/SideBarLogout";
 import DashboardLayout from "../../components/Layout/Dashboard";
 
 interface Props {
@@ -34,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (
     let tab: string = context.query.tab as string;
     if (!tabs.includes(tab)) tab = tabs[0];
     switch (tab) {
-      case "book-flight":
+      case tabs[0]:
         const { data: flights } = await service(context).get(`user-db/flights`);
         return { props: { flights, tab, hasError: false } };
       case "booking":

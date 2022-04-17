@@ -1,38 +1,13 @@
 import React, { useState } from "react";
-import { ICity, IUser } from "../../../types";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-} from "chart.js";
-import { Pie, Bar } from "react-chartjs-2";
+import { IUser } from "../../../types";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
 import { randomBetween } from "../../../utils/Number";
 import { useRouter } from "next/router";
 
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-const UserList = ({
-  users,
-  cities: allCities,
-}: {
-  users: IUser[];
-  cities: ICity[];
-}) => {
+const UserList = ({ users }: { users: IUser[] }) => {
   const router = useRouter();
   const [pageNo, setPageNo] = useState(
     typeof router.query.page == "string" ? parseInt(router.query.page) : 1
@@ -61,7 +36,7 @@ const UserList = ({
     .filter((city) => city != null)
     .filter((v, i, s) => s.map((s) => s.id).indexOf(v.id) == i);
 
-  const generateColors = (n: number) => {
+  const generateRandomColors = (n: number, colorAlpha: number = 1) => {
     let bgColors: string[] = [];
     let borderColors: string[] = [];
     [...Array(n).keys()].forEach(() => {
@@ -74,53 +49,19 @@ const UserList = ({
     return { bgColors, borderColors };
   };
 
-  const cityStoppageBarOptions = {
-    responsive: true,
+  const pieOptions = (title: string) => ({
     plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Stoppages in cities",
-      },
+      title: { text: title, display: true },
     },
-  };
-
-  const cityStoppageBarData = {
-    labels: allCities.map((c) => c.name),
-    datasets: [
-      {
-        label: "Number of stoppages in Cities",
-        data: allCities.map((c) => c.stopages.length),
-        backgroundColor: "rgba(115, 199, 132, 0.5)",
-      },
-    ],
-  };
-
-  const cityPieOptions = {
-    plugins: {
-      title: { text: "Number of people in cities", display: true },
-    },
-  };
-  const rolePieOptions = {
-    plugins: {
-      title: { text: "Number of role based users", display: true },
-    },
-  };
-  const verifiedPieOptions = {
-    plugins: {
-      title: { text: "Number of role based users", display: true },
-    },
-  };
+  });
   const cityPieData = {
     labels: cities.map((c) => `${c.name}, ${c.country}`),
     datasets: [
       {
         label: "# of People in City",
         data: cities.map((c) => users.filter((u) => u.city_id == c.id).length),
-        backgroundColor: generateColors(cities.length).bgColors,
-        borderColor: generateColors(cities.length).borderColors,
+        backgroundColor: generateRandomColors(cities.length).bgColors,
+        borderColor: generateRandomColors(cities.length).borderColors,
         borderWidth: 1,
       },
     ],
@@ -131,10 +72,9 @@ const UserList = ({
     datasets: [
       {
         label: "# of Verified Users",
-        data: [
-          users.filter((u) => u.verified).length,
-          users.filter((u) => !u.verified).length,
-        ],
+        data: [true, false].map(
+          (b) => users.filter((u) => u.verified == b).length
+        ),
         backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
         borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
         borderWidth: 1,
@@ -168,16 +108,22 @@ const UserList = ({
     <div>
       <div className="flex flex-wrap gap-20 justify-center">
         <div className="min-w-[400px] mx-auto mb-20">
-          <Pie options={cityPieOptions} data={cityPieData} />
+          <Pie
+            options={pieOptions("Number of users in cities")}
+            data={cityPieData}
+          />
         </div>
         <div className="min-w-[400px] mx-auto mb-20">
-          <Pie options={rolePieOptions} data={rolePieData} />
+          <Pie
+            options={pieOptions("Number of users based on roles")}
+            data={rolePieData}
+          />
         </div>
         <div className="min-w-[400px] mx-auto mb-20">
-          <Pie options={verifiedPieOptions} data={verifiedPieData} />
-        </div>
-        <div className="min-w-[1000px] mx-auto mb-20">
-          <Bar options={cityStoppageBarOptions} data={cityStoppageBarData} />
+          <Pie
+            options={pieOptions("Number of users based on verification")}
+            data={verifiedPieData}
+          />
         </div>
       </div>
       <div className="flex flex-col items-center">
